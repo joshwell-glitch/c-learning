@@ -14,5 +14,8 @@ typedef struct
 //this is where i store my students.
 Student students[100];
 
+//FUNCTIONS:
+void addStudent();
+
 
 #endif

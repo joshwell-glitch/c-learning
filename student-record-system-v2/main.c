@@ -28,7 +28,7 @@ int main(){
         switch (input)
         {
         case 1:
-            /* code */
+            addStudent();
             break;
         
         default:
