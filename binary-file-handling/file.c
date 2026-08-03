@@ -8,21 +8,23 @@ void addFile(){
     FILE *fp = fopen(FILENAME, "wb");
     char content[100];
 
+    if (fp ==   NULL){
+        perror("Failed to create file");
+        return;
+    }
+
     line(2);
     printf("Create file\n");
     line(2);
-
-    if (fp ==   NULL){
-        perror("Error: Failed to create file!\n");
-        return;
-    }
+    printf("Enter text to create a file:\n");
 
     fgets(content, sizeof(content), stdin);
     clearStr(content);
     fwrite(&content, sizeof(content), 1, fp);
+    fclose(fp);
+
     line(1);
     printf("File created successfully!\n");
-    fclose(fp);
     line(1);
 
     printf("Enter to return...");
@@ -33,21 +35,22 @@ void addFile(){
 
 void readFile(){
     FILE *fp = fopen(FILENAME, "rb");
-    char buffer[101];
+    char buffer[100];
+
+    if (fp == NULL){
+        perror("Failed to read file");
+        return;
+    }
 
     line(2);
     printf("File Content\n");
     line(2);
 
-    if (fp == NULL){
-        perror("Error: Failed to read file!\n");
-        return;
+    while (fread(buffer, sizeof(buffer), 1, fp) == 1){
+        printf("%s\n", buffer);
     }
-
-    size_t bytes_read = fread(&buffer, 1, 100, fp);
-    buffer[bytes_read] = '\0';
-    printf("%s\n", buffer);
     fclose(fp);
+
     line(1);
     printf("File read successfully!\n");
     line(1);
@@ -61,23 +64,22 @@ void readFile(){
 void appendFile(){
     FILE *fp = fopen(FILENAME, "ab");
     char content[100];
-    char current[100];
     
-    line(2);
-    printf("Append File\n");
-    line(2);
-
     if (fp == NULL){
-        perror("Error: Failed to append file!\n");
+        perror("Failed to append file");
         return;
     }
 
-    fgets(current, sizeof(current), stdin);
-    clearStr(current);
-    size_t remaining_space = sizeof(content) - strlen(content) - 1;
-    strncat(content, current, remaining_space);
-    printf("%s", content);
+    line(2);
+    printf("Append File\n");
+    line(2);
+    printf("Enter text to append:\n");
+
+    fgets(content, sizeof(content), stdin);
+    clearStr(content);
+    fwrite(content, sizeof(content), 1, fp);
     fclose(fp);
+
     line(1);
     printf("File appended successfully\n");
     line(1);
@@ -95,6 +97,6 @@ void deleteFile(){
     }
     else
     {
-        perror("Error: Failed to remove file!\n");
+        perror("Failed to remove file");
     }
 }

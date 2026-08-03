@@ -18,6 +18,7 @@ int main(){
         printf("4. Delete file.\n");
         printf("5. Exit program..\n");
         line(0);
+        printf("Enter Choice: ");
 
         if (scanf("%d", &choice)!= 1 || choice < 1 || choice > 5){
             clearInt();
