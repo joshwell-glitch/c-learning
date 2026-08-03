@@ -1,5 +1,5 @@
-#ifndef HELP_H
-#define HELP_H
+#ifndef UTILS_H
+#define UTILS_H
 
 //HELPER FUNCTIONS:
 

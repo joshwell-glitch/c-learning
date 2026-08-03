@@ -1,48 +1,33 @@
 #include <stdio.h>
 #include "student.h"
-#include "help.h"
+#include "utils.h"
 
 Student students[MAX_STUDENTS];
 
-//FUNCTION PROTOTYPES:
-void addStudent();
-void viewStudent();
-
-//student management:
-void studentManagement(){
-    int choice;
-    while(1){
+void addStudent(int *id, int *studentCount){
+    int newId = *id + 1;
+    while (1)
+    {
         line(2);
-        printf("Student Management\n");
+        printf("ADD STUDENT\n");
         line(2);
 
-        if (scanf("%d", &choice)!=1){
-            clearInt();
-            invalid();
-            continue;
-        }
+        printf("Student ID: %d\n", newId);
 
-        clearInt();
-        clear();
-        switch (choice)
-        {
-        case 1:
-            
-            break;
-        
-        default:
-            break;
-        }
+        getchar();
 
 
+        return;
     }
-}
+    
 
-void addStudent(){
-    return;
 }
 
 void viewStudent(){
+    return;
+}
+
+void searchStudent(){
     return;
 }
 
@@ -51,5 +36,9 @@ void editStudent(){
 }
 
 void deleteStudent(){
+    return;
+}
+
+void statistics(){
     return;
 }

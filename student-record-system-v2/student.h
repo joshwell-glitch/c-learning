@@ -1,23 +1,16 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 #define MAX_STUDENTS 100
-#define FILENAME "data.bin"
+#define FILENAME "data.dat"
 
 //student structs details.
 typedef struct
 {
     int id;
-    char firstName[20];
-    char lastName[20];
+     char name[30];
     int age;
-    char gender;
-    char course[10];
-    char level[10];
-    char section[10];
-    char email[20];
-    int phoneNumber;
+    char course[30];
     float gpa;
-
 }Student;
 
 /*this is where i store my students.
@@ -31,7 +24,11 @@ extern Student students[MAX_STUDENTS];
 
 //FUNCTIONS:
 
-void studentManagement();
-
+void addStudent(int *id, int *studentCount);
+void viewStudent();
+void searchStudent();
+void editStudent();
+void deleteStudent();
+void statistics();
 
 #endif
