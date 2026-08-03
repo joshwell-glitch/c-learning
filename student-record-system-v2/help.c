@@ -32,3 +32,8 @@ void clearStr(char string[]){
         string[len - 1] = '\n';
     }
 }
+
+void invalid(){
+    clear();
+    fprintf(stderr,"Invalid Input!\n");
+}

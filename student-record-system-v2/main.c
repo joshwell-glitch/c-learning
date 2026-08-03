@@ -9,28 +9,50 @@ the version 2 has the memory of the student's info,
 i tried to use my basic file handling skills in this project.*/
 
 int main(){
-    int input;
+    int choice;
+    int studentCount;
     while (1)
     {
         line(2);
         printf("STUDENT RECORD SYSTEM V2\n");
         line(2);
+        line(0);
+        printf("1. Student Management\n");
+        printf("2. Search Records\n");
+        printf("3. Academic Reports\n");
+        printf("4. Statictics\n");
+        printf("5. File Operations\n");
+        printf("6. Settings\n");
+        printf("0. Exit\n");
+        line(0);
+        printf("Choice: ");
 
-        if (scanf("%d", &input)!= 1){
+        if (scanf("%d", &choice)!= 1){
             clearInt();
-            clear();
-            printf("Invalid Input!\n");
+            invalid();
             continue;
         }
 
         clearInt();
         clear();
-        switch (input)
+        switch (choice)
         {
         case 1:
-            addStudent();
+            studentManagement();
             break;
-        
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        case 6:
+            break;
+        case 0:
+            return 0;
+
         default:
             break;
         }

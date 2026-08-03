@@ -11,5 +11,7 @@ void clear();
 void clearInt();
 //clear string buffer.
 void clearStr(char string[]);
+//invalid input.
+void invalid();
 
 #endif
