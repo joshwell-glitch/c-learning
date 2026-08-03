@@ -17,7 +17,6 @@ int main(){
         line(2);
         printf("STUDENT RECORD SYSTEM V2\n");
         line(2);
-        line(0);
         printf("Total number of students: %d/%d\n", studentCount, MAX_STUDENTS);
         line(0);
         printf("1. Add Student\n");
@@ -32,7 +31,7 @@ int main(){
 
         if (scanf("%d", &choice)!= 1){
             clearInt();
-            invalid();
+            invalidInput();
             continue;
         }
 
@@ -44,25 +43,22 @@ int main(){
             addStudent(&id, &studentCount);
             break;
         case 2:
-        viewStudent();
+            viewStudent(studentCount);
             break;
         case 3:
-        searchStudent();
+            searchStudent();
             break;
         case 4:
-        editStudent();;
+            editStudent();;
             break;
         case 5:
         deleteStudent();
             break;
         case 6:
-        statistics();
+            statistics();
             break;
         case 0:
             return 0;
-
-        default:
-            break;
         }
     }
 }

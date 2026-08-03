@@ -29,11 +29,17 @@ void clearStr(char string[]){
     size_t len = strlen(string);
 
     if (len > 0 && string[len - 1] == '\n'){
-        string[len - 1] = '\n';
+        string[len - 1] = '\0';
     }
 }
 
-void invalid(){
+//prints invalid input.
+void invalidInput(){
     clear();
-    fprintf(stderr,"Invalid Input!\n");
+    perror("Invalid Input");
+}
+
+//prints enter to return...
+void enterToReturn(){
+    printf("Enter to return...");
 }

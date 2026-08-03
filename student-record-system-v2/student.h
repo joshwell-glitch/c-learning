@@ -1,7 +1,7 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 #define MAX_STUDENTS 100
-#define FILENAME "data.dat"
+#define FILENAME "data.bin"
 
 //student structs details.
 typedef struct
@@ -19,16 +19,18 @@ this variable struct exists somewhere(in this case, it is in student.c).
 it avoids creating this variable multiple times
 when i declared "student.h" in main, if i don't do this, the compiler won't
 work.*/
-
 extern Student students[MAX_STUDENTS];
 
 //FUNCTIONS:
 
 void addStudent(int *id, int *studentCount);
-void viewStudent();
+void viewStudent(int studentCount);
 void searchStudent();
 void editStudent();
 void deleteStudent();
 void statistics();
+
+void save();
+void load();
 
 #endif

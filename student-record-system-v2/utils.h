@@ -12,6 +12,8 @@ void clearInt();
 //clear string buffer.
 void clearStr(char string[]);
 //invalid input.
-void invalid();
+void invalidInput();
+//enter to return.
+void enterToReturn();
 
 #endif
