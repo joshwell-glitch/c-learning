@@ -14,6 +14,8 @@ int main(){
     int id = 1000;
     while (1)
     {
+        studentCount = load();
+
         line(2);
         printf("STUDENT RECORD SYSTEM V2\n");
         line(2);
@@ -25,11 +27,11 @@ int main(){
         printf("4. Edit Student\n");
         printf("5. Delete Student\n");
         printf("6. Statistics\n");
-        printf("0. Exit\n");
+        printf("7. Exit\n");
         line(0);
         printf("Choice: ");
 
-        if (scanf("%d", &choice)!= 1){
+        if (scanf("%d", &choice)!= 1 || choice < 1 || choice > 7){
             clearInt();
             invalidInput();
             continue;
@@ -52,12 +54,12 @@ int main(){
             editStudent();;
             break;
         case 5:
-        deleteStudent();
+            deleteStudent(&studentCount);
             break;
         case 6:
             statistics();
             break;
-        case 0:
+        case 7:
             return 0;
         }
     }

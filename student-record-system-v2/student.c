@@ -15,17 +15,19 @@ void addStudent(int *id, int *studentCount){
         line(2);
 
         printf("Student ID: %d\n", newId);
+        newStudent.id = newId;
 
         printf("Enter name: ");
         fgets(newStudent.name, sizeof(newStudent.name), stdin);
         clearStr(newStudent.name);
 
         students[*studentCount] = newStudent;
-        fwrite(students, sizeof(Student), 1, stream);
+        fwrite(&students, sizeof(Student), 1, stream);
+        (*id)++;
         (*studentCount)++;
+        save(*studentCount);
 
         fclose(stream);
-        printf("Student Added Successfully!\n");
 
         enterToReturn();
         getchar();
@@ -36,15 +38,18 @@ void addStudent(int *id, int *studentCount){
 
 void viewStudent(int studentCount){
     FILE *stream = fopen(FILENAME, "rb");
-    char name[30];
 
     line(2);
     printf("VIEWING ALL STUDENTS\n");
     line(2);
 
-    while (fread(name, sizeof(name), 1, stream) == 1){
-        printf("Name: %s\n", name);
+    for (int i = 0; i < studentCount; i++){
+        fread(&students[i], sizeof(Student), 1, stream);
+        printf("[%d] ID: %d | NAME: %s\n", studentCount, students[i].id, students[i].name);
+        line(1);
     }
+
+
     fclose(stream);
 
     enterToReturn();
@@ -61,8 +66,16 @@ void editStudent(){
     return;
 }
 
-void deleteStudent(){
-    return;
+void deleteStudent(int *studentCount){
+    if (remove(FILENAME) == 0 && remove(SAVEDFILE) == 0){
+        clear();
+        printf("Student Deleted Successfully!\n");
+        (*studentCount) = 0;
+    } else
+    {
+        clear();
+        perror("Student Delete Failed");
+    }
 }
 
 void statistics(){
@@ -71,9 +84,33 @@ void statistics(){
 
 //SAVE AND LOAD.
 
-void save(){
-    return;
+void save(int studentCount){
+    FILE *stream = fopen(SAVEDFILE, "wb");
+    int count = (studentCount);
+
+    if (stream == NULL){
+        perror("Failed to save file");
+    }
+
+    fwrite(&count, sizeof(count), 1, stream);
+
+    printf("Student Saved Successfully!\n");
+
+    fclose(stream);
 }
-void load(){
-    return;
+int load(){
+    FILE *stream = fopen(SAVEDFILE, "rb");
+    int count = 0;
+    
+    if (stream == NULL){
+        perror("Failed to load file");
+    }
+
+    fread(&count, sizeof(count), 1, stream);
+
+    clear();
+    printf("File Loaded Successfully!\n");
+
+    fclose(stream);
+    return count;
 }
