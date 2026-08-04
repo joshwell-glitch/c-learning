@@ -49,7 +49,7 @@ int main(){
             viewStudent(studentCount);
             break;
         case 3:
-            searchStudent();
+            searchStudent(studentCount);
             break;
         case 4:
             editStudent();;

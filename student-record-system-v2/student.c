@@ -8,7 +8,6 @@ Student students[MAX_STUDENTS];
 
 void addStudent(int *id, int *studentCount){
     FILE *stream = fopen(FILENAME, "ab");
-
     if (stream == NULL){
         perror("");
         return;
@@ -91,7 +90,6 @@ void addStudent(int *id, int *studentCount){
 
 void viewStudent(int studentCount){
     FILE *stream = fopen(FILENAME, "rb");
-
     if (stream == NULL){
         perror("");
         return;
@@ -118,8 +116,64 @@ void viewStudent(int studentCount){
     return;
 }
 
-void searchStudent(){
-    return;
+void searchStudent(int studentCount){
+    FILE *stream;
+    int input;
+    while (1)
+    {
+        stream = fopen(FILENAME, "rb");
+        if (stream == NULL){
+        perror("");
+        return;
+        }
+        line(2);
+        printf("SEARCH STUDENT\n");
+        line(2);
+        printf("Total number of students: %d/%d\n", studentCount, MAX_STUDENTS);
+        line(1);
+        printf("Enter Student ID: ");
+        if (scanf("%d", &input) != 1){
+            clearInt();
+            clear();
+            invalidInput();
+            continue;
+        }
+        clearInt();
+        if (input == 0){
+            clear();
+            fclose(stream);
+            return;
+        if (input < 1000){
+            clear();
+            printf("ID starts at 1000!\n");
+            continue;
+        }
+        line(1);
+        }
+        for (int i = 0; i < studentCount; i++){
+            fread(&students[i], sizeof(students[i]), 1, stream);
+            if (input == students[i].id){
+                clear();
+                line(2);
+                printf("SEARCH STUDENT\n");
+                line(2);
+
+                printf("Student Found!\n");
+                line(1);
+                printf("[%d.] ID: %d | Name: %s | Age: %d | Course: %s | GWA: %.2f\n"
+                ,  i + 1, students[i].id, students[i].name, students[i].age, students[i].course, students[i].gwa);
+                line(1);
+                enterToReturn();
+                getchar();
+                fclose(stream);
+                clear();
+                return;
+           }
+        }
+        clear();
+        printf("Student Not Found!\n");
+        fclose(stream);
+    }
 }
 
 void editStudent(){
@@ -132,7 +186,6 @@ void deleteStudent(int *id, int *studentCount){
 
 void statistics(int studentCount){
     FILE *stream = fopen(FILENAME, "rb");
-
     if (stream == NULL){
         perror("");
         return;

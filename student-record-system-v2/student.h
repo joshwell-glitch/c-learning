@@ -28,7 +28,7 @@ extern Student students[MAX_STUDENTS];
 
 void addStudent(int *id, int *studentCount);
 void viewStudent(int studentCount);
-void searchStudent();
+void searchStudent(int studentCount);
 void editStudent();
 void deleteStudent(int *id, int *studentCount);
 void reset(int *id, int *studentCount);
