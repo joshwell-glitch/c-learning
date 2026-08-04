@@ -1,9 +1,10 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 #define MAX_STUDENTS 100
-#define FILENAME "data.bin"
-#define SAVEDCOUNT "saved.bin"
-#define SAVEDID "id"
+#define FILENAME "data/data.bin"
+#define SAVED_COUNT "data/saved.bin"
+#define SAVED_ID "data/id.bin"
+#define MAX_CHAR_COURSE 5
 
 //student structs details.
 typedef struct
@@ -11,7 +12,7 @@ typedef struct
     int id;
     char name[30];
     int age;
-    char course[4];
+    char course[MAX_CHAR_COURSE];
     float gpa;
 }Student;
 
@@ -32,7 +33,7 @@ void editStudent();
 void deleteStudent(int *id, int *studentCount);
 void statistics();
 
-void save(int studentCount);
+void save(int id, int studentCount);
 int load(int *id);
 
 #endif

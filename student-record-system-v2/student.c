@@ -10,7 +10,7 @@ void addStudent(int *id, int *studentCount){
     Student newStudent;
     int newId = *id + 1;
     int course;
-    const char *courses[] = {"BSCS", "BSIT", "BSCE"};
+    const char courses[3][MAX_CHAR_COURSE] = {"BSCS", "BSIT", "BSCE"};
     while (1)
     {
         line(2);
@@ -68,10 +68,10 @@ void addStudent(int *id, int *studentCount){
 
         line(1);
         students[*studentCount] = newStudent;
-        fwrite(&students[*studentCount], sizeof(Student), 1, stream);
+        fwrite(&students[*studentCount], sizeof(students[*studentCount]), 1, stream);
         (*id)++;
         (*studentCount)++;
-        save(*studentCount);
+        save(*id, *studentCount);
         fclose(stream);
         line(1);
 
@@ -90,7 +90,7 @@ void viewStudent(int studentCount){
     line(2);
 
     for (int i = 0; i < studentCount; i++){
-        fread(&students[i], sizeof(Student), 1, stream);
+        fread(&students[i], sizeof(students[i]), 1, stream);
         printf("[%d] ID: %d | Name: %s | Age: %d | Course: %s | GPA: %.1f\n",
         i + 1, students[i].id, students[i].name, students[i].age, students[i].course, students[i].gpa);
         line(1);
@@ -113,7 +113,7 @@ void editStudent(){
 }
 
 void deleteStudent(int *id, int *studentCount){
-    if (remove(FILENAME) == 0 && remove(SAVEDCOUNT) == 0){
+    if (remove(FILENAME) == 0 && remove(SAVED_COUNT) == 0 && remove(SAVED_ID) == 0){
         clear();
         printf("Student Deleted Successfully!\n");
         (*studentCount) = 0;
@@ -131,8 +131,8 @@ void statistics(){
 
 //SAVE AND LOAD.
 
-void save(int studentCount){
-    FILE *stream = fopen(SAVEDCOUNT, "wb");
+void save(int id, int studentCount){
+    FILE *stream = fopen(SAVED_COUNT, "wb");
     int count = (studentCount);
 
     if (stream == NULL){
@@ -140,13 +140,21 @@ void save(int studentCount){
     }
 
     fwrite(&count, sizeof(count), 1, stream);
-
-    printf("Student Saved Successfully!\n");
-
     fclose(stream);
+
+//-----------------------------------------
+    stream = fopen(SAVED_ID, "wb");
+    int saveId = (id);
+    if (stream == NULL){
+        perror("Failed to save file");
+    }
+
+    fwrite(&saveId, sizeof(saveId), 1,stream);
+    fclose(stream);
+    printf("Student Saved Successfully!\n");
 }
 int load(int *id){
-    FILE *stream = fopen(SAVEDCOUNT, "rb");
+    FILE *stream = fopen(SAVED_COUNT, "rb");
     int count = 0;
     
     if (stream == NULL){
@@ -157,9 +165,20 @@ int load(int *id){
     fread(&count, sizeof(count), 1, stream);
 
     clear();
-    printf("File Loaded Successfully!\n");
-
     fclose(stream);
+//----------------------------------------
+    stream = fopen(SAVED_ID, "rb");
+    int newId = 1000;
 
+    if (stream == NULL){
+        perror("Failed to load file");
+    }
+
+    fread(&newId, sizeof(int), 1, stream);
+    (*id) = newId;
+
+    clear();
+    fclose(stream);
+    printf("File Loaded Successfully!\n");
     return count;
 }
