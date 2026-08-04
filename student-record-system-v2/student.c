@@ -33,7 +33,7 @@ void addStudent(int *id, int *studentCount){
         clearStr(newStudent.name);
         line(1);
 
-        printf("Enter Age (15-100): ");
+        printf("Enter Age (15 - 100): ");
         if (scanf("%d", &newStudent.age) != 1 || newStudent.age < 15 || newStudent.age > 100){
             clearInt();
             invalidInput();
@@ -65,8 +65,8 @@ void addStudent(int *id, int *studentCount){
         }
         line(1);
 
-        printf("Enter GWA: ");
-        if (scanf("%f", &newStudent.gwa)!= 1 || newStudent.gwa < 0 || newStudent.gwa > 100){
+        printf("Enter GWA (1.00 - 5.00): ");
+        if (scanf("%f", &newStudent.gwa)!= 1 || newStudent.gwa < 1 || newStudent.gwa > 5.0){
             clearInt();
             invalidInput();
             continue;
@@ -105,7 +105,7 @@ void viewStudent(int studentCount){
 
     for (int i = 0; i < studentCount; i++){
         fread(&students[i], sizeof(students[i]), 1, stream);
-        printf("[%d] ID: %d | Name: %s | Age: %d | Course: %s | GWA: %.2f\n",
+        printf("[%d.] ID: %d | Name: %s | Age: %d | Course: %s | GWA: %.2f\n",
         i + 1, students[i].id, students[i].name, students[i].age, students[i].course, students[i].gwa);
         line(1);
     }
@@ -137,12 +137,44 @@ void statistics(int studentCount){
         perror("");
         return;
     }
+
     int passed = 0;
+    int conditional = 0;
     int failed = 0;
     float averageGWA = 0.0f;
     float averageAge = 0.0f;
+    float totalGWA = 0.0f;
+    float totalAge = 0.0f;
     float highest = 0.0f;
     float lowest = 0.0f;
+
+    for (int i = 0; i < studentCount; i++){
+        fread(&students[i], sizeof(students[i]), 1, stream);
+        if (students[i].gwa == 5){
+            failed++;
+        }
+        else if (students[i].gwa == 4){
+            conditional++;
+        }
+        else{
+            passed++;
+        }
+        
+        highest = students[0].gwa;
+        lowest = students[0].gwa;
+        if (highest > students[i].gwa){
+            highest = students[i].gwa;
+        }
+        if (lowest < students[i].gwa){
+            lowest = students[i].gwa;
+        }
+
+        totalAge += students[i].age;
+        totalGWA +=students[i].gwa;
+    }
+
+    averageAge = totalAge / studentCount;
+    averageGWA = totalGWA / studentCount;
 
     line(2);
     printf("STATISTICS\n");
@@ -158,6 +190,7 @@ void statistics(int studentCount){
     printf("Average Age: %.2f\n", averageAge);
     line(0);
     printf("Passed Students: %d\n", passed);
+    printf("Conditional Students: %d\n", conditional);
     printf("Failed Students: %d\n", failed);
 
     fclose(stream);
