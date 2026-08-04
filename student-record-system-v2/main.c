@@ -12,9 +12,9 @@ int main(){
     int choice;
     int studentCount = 0;
     int id = 1000;
+    studentCount = load(&id);
     while (1)
     {
-        studentCount = load();
 
         line(2);
         printf("STUDENT RECORD SYSTEM V2\n");
@@ -54,7 +54,7 @@ int main(){
             editStudent();;
             break;
         case 5:
-            deleteStudent(&studentCount);
+            deleteStudent(&id ,&studentCount);
             break;
         case 6:
             statistics();
