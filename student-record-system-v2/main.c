@@ -20,7 +20,7 @@ int main(){
         printf("STUDENT RECORD SYSTEM V2\n");
         line(2);
         printf("Total number of students: %d/%d\n", studentCount, MAX_STUDENTS);
-        line(0);
+        line(1);
         printf("1. Add Student\n");
         printf("2. View Students\n");
         printf("3. Search Student\n");
@@ -52,10 +52,10 @@ int main(){
             searchStudent(studentCount);
             break;
         case 4:
-            editStudent();;
+            editStudent();
             break;
         case 5:
-            deleteStudent(&id ,&studentCount);
+            deleteStudent(id, &studentCount);
             break;
         case 6:
             statistics(studentCount);

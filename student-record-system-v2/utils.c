@@ -36,7 +36,7 @@ void clearStr(char string[]){
 //prints invalid input.
 void invalidInput(){
     clear();
-    perror("");
+    perror("Invalid Input");
 }
 
 //prints enter to return...

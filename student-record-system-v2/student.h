@@ -30,7 +30,7 @@ void addStudent(int *id, int *studentCount);
 void viewStudent(int studentCount);
 void searchStudent(int studentCount);
 void editStudent();
-void deleteStudent(int *id, int *studentCount);
+void deleteStudent(int id, int *studentCount);
 void reset(int *id, int *studentCount);
 void statistics(int studentCount);
 

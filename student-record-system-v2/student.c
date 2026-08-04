@@ -72,7 +72,6 @@ void addStudent(int *id, int *studentCount){
         }
         clearInt();
 
-        line(1);
         students[*studentCount] = newStudent;
         fwrite(&students[*studentCount], sizeof(students[*studentCount]), 1, stream);
         (*id)++;
@@ -129,7 +128,7 @@ void searchStudent(int studentCount){
         line(2);
         printf("SEARCH STUDENT\n");
         line(2);
-        printf("Total number of students: %d/%d\n", studentCount, MAX_STUDENTS);
+        printf("[0] Return\n");
         line(1);
         printf("Enter Student ID: ");
         if (scanf("%d", &input) != 1){
@@ -180,8 +179,104 @@ void editStudent(){
     return;
 }
 
-void deleteStudent(int *id, int *studentCount){
-    return;
+void deleteStudent(int id, int *studentCount){
+    FILE *stream;
+    int input;
+    char choice;
+    while (1)
+    {
+        stream = fopen(FILENAME, "rb");
+        if (stream == NULL){
+        perror("");
+        return;
+        }
+        line(2);
+        printf("DELETE STUDENT\n");
+        line(2);
+        printf("[0] Return\n");
+        line(1);
+        printf("Enter Student ID: ");
+        if (scanf("%d", &input) != 1){
+            clearInt();
+            clear();
+            invalidInput();
+            fclose(stream);
+            continue;
+        }
+        clearInt();
+        if (input == 0){
+            clear();
+            fclose(stream);
+            return;
+        if (input < 1000){
+            clear();
+            printf("ID starts at 1000!\n");
+            continue;
+        }
+        line(1);
+        }
+        for (int i = 0; i < *studentCount; i++){
+            fread(&students[i], sizeof(students[i]), 1, stream);
+            if (input == students[i].id){
+                clear();
+                line(2);
+                printf("DELETE STUDENT\n");
+                line(2);
+
+                printf("Student Found!\n");
+                line(1);
+                printf("[%d.] ID: %d | Name: %s | Age: %d | Course: %s | GWA: %.2f\n"
+                ,  i + 1, students[i].id, students[i].name, students[i].age, students[i].course, students[i].gwa);
+                line(1);
+                printf("Are you sure to delete this student?\n");
+                printf("[Y/N]\n");
+                line(0);
+                printf("Enter Choice: ");
+                if (scanf("%c", &choice)!= 1){
+                    clearInt();
+                    clear();
+                    invalidInput();
+                    fclose(stream);
+                    continue;
+                }
+                choice = toupper(choice);
+                clearInt();
+                clear();
+                switch (choice)
+                {
+                case 'Y':
+                    if (stream == NULL){
+                        clear();
+                        perror("");
+                        return;
+                    }
+                    for (i; i < *studentCount - 1; i++){
+                        students[i] = students[i+1];
+                    }
+                    (*studentCount)--;
+                    stream = freopen(FILENAME, "wb", stream);
+                    for (int f = 0; f < *studentCount; f++){
+                        fwrite(&students[f], sizeof(students[f]), 1, stream);
+                    }
+                    save(id, *studentCount);
+                    fclose(stream);
+                    printf("Student Deleted Successfully!\n");
+                    line(1);
+                    enterToReturn();
+                    getchar();
+                    clear();
+                    return;
+
+                case 'N':
+                    fclose(stream);
+                    return;
+                }
+           }
+        }
+        clear();
+        printf("Student Not Found!\n");
+        fclose(stream);
+    }
 }
 
 void statistics(int studentCount){
@@ -201,6 +296,8 @@ void statistics(int studentCount){
     float highest = 0.0f;
     float lowest = 0.0f;
 
+    highest = students[0].gwa;
+    lowest = students[0].gwa;
     for (int i = 0; i < studentCount; i++){
         fread(&students[i], sizeof(students[i]), 1, stream);
         if (students[i].gwa == 5){
@@ -213,8 +310,6 @@ void statistics(int studentCount){
             passed++;
         }
         
-        highest = students[0].gwa;
-        lowest = students[0].gwa;
         if (highest > students[i].gwa){
             highest = students[i].gwa;
         }
@@ -321,10 +416,8 @@ void save(int id, int studentCount){
         perror("Failed to save file");
         return;
     }
-
     fwrite(&saveId, sizeof(saveId), 1,stream);
     fclose(stream);
-    printf("Student Saved Successfully!\n");
 }
 
 int load(int *id){
