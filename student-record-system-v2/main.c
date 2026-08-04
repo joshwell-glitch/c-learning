@@ -27,11 +27,12 @@ int main(){
         printf("4. Edit Student\n");
         printf("5. Delete Student\n");
         printf("6. Statistics\n");
-        printf("7. Exit\n");
+        printf("7. Reset Records\n");
+        printf("8. Exit\n");
         line(0);
         printf("Choice: ");
 
-        if (scanf("%d", &choice)!= 1 || choice < 1 || choice > 7){
+        if (scanf("%d", &choice)!= 1 || choice < 1 || choice > 8){
             clearInt();
             invalidInput();
             continue;
@@ -57,9 +58,12 @@ int main(){
             deleteStudent(&id ,&studentCount);
             break;
         case 6:
-            statistics();
+            statistics(studentCount);
             break;
         case 7:
+            reset(&id, &studentCount);
+            break;
+        case 8:
             return 0;
         }
     }

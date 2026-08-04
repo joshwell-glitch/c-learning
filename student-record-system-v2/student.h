@@ -13,7 +13,7 @@ typedef struct
     char name[30];
     int age;
     char course[MAX_CHAR_COURSE];
-    float gpa;
+    float gwa;
 }Student;
 
 /*this is where i store my students.
@@ -31,7 +31,8 @@ void viewStudent(int studentCount);
 void searchStudent();
 void editStudent();
 void deleteStudent(int *id, int *studentCount);
-void statistics();
+void reset(int *id, int *studentCount);
+void statistics(int studentCount);
 
 void save(int id, int studentCount);
 int load(int *id);

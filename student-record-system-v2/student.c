@@ -1,12 +1,19 @@
 #include <stdio.h>
 #include "student.h"
 #include <string.h>
+#include <ctype.h>
 #include "utils.h"
 
 Student students[MAX_STUDENTS];
 
 void addStudent(int *id, int *studentCount){
     FILE *stream = fopen(FILENAME, "ab");
+
+    if (stream == NULL){
+        perror("");
+        return;
+    }
+
     Student newStudent;
     int newId = *id + 1;
     int course;
@@ -58,8 +65,8 @@ void addStudent(int *id, int *studentCount){
         }
         line(1);
 
-        printf("Enter GPA: ");
-        if (scanf("%f", &newStudent.gpa)!= 1 || newStudent.gpa < 0 || newStudent.gpa > 100){
+        printf("Enter GWA: ");
+        if (scanf("%f", &newStudent.gwa)!= 1 || newStudent.gwa < 0 || newStudent.gwa > 100){
             clearInt();
             invalidInput();
             continue;
@@ -73,8 +80,8 @@ void addStudent(int *id, int *studentCount){
         (*studentCount)++;
         save(*id, *studentCount);
         fclose(stream);
-        line(1);
 
+        line(1);
         enterToReturn();
         getchar();
         clear();
@@ -85,14 +92,21 @@ void addStudent(int *id, int *studentCount){
 void viewStudent(int studentCount){
     FILE *stream = fopen(FILENAME, "rb");
 
+    if (stream == NULL){
+        perror("");
+        return;
+    }
+
     line(2);
     printf("VIEWING ALL STUDENTS\n");
     line(2);
+    printf("Total number of students: %d/%d\n", studentCount, MAX_STUDENTS);
+    line(1);
 
     for (int i = 0; i < studentCount; i++){
         fread(&students[i], sizeof(students[i]), 1, stream);
-        printf("[%d] ID: %d | Name: %s | Age: %d | Course: %s | GPA: %.1f\n",
-        i + 1, students[i].id, students[i].name, students[i].age, students[i].course, students[i].gpa);
+        printf("[%d] ID: %d | Name: %s | Age: %d | Course: %s | GWA: %.2f\n",
+        i + 1, students[i].id, students[i].name, students[i].age, students[i].course, students[i].gwa);
         line(1);
     }
 
@@ -113,20 +127,91 @@ void editStudent(){
 }
 
 void deleteStudent(int *id, int *studentCount){
-    if (remove(FILENAME) == 0 && remove(SAVED_COUNT) == 0 && remove(SAVED_ID) == 0){
-        clear();
-        printf("Student Deleted Successfully!\n");
-        (*studentCount) = 0;
-        (*id) = 1000;
-    } else
-    {
-        clear();
-        perror("Student Delete Failed");
-    }
+    return;
 }
 
-void statistics(){
+void statistics(int studentCount){
+    FILE *stream = fopen(FILENAME, "rb");
+
+    if (stream == NULL){
+        perror("");
+        return;
+    }
+    int passed = 0;
+    int failed = 0;
+    float averageGWA = 0.0f;
+    float averageAge = 0.0f;
+    float highest = 0.0f;
+    float lowest = 0.0f;
+
+    line(2);
+    printf("STATISTICS\n");
+    line(2);
+
+    printf("Total number of students: %d/%d\n", studentCount, MAX_STUDENTS);
+    line(1);
+
+    printf("Highest GWA: %.2f\n", highest);
+    printf("Lowest GWA: %.2f\n", lowest);
+    line(0);
+    printf("Average GWA: %.2f\n", averageGWA);
+    printf("Average Age: %.2f\n", averageAge);
+    line(0);
+    printf("Passed Students: %d\n", passed);
+    printf("Failed Students: %d\n", failed);
+
+    fclose(stream);
+    line(1);
+    enterToReturn();
+    getchar();
+    clear();
     return;
+}
+
+void reset(int *id, int *studentCount){
+    FILE *stream = fopen(FILENAME, "rb");
+    if (stream == NULL){
+        perror("");
+        return;
+    }
+    fclose(stream);
+    char choice;
+    while(1){
+        line(2);
+        printf("RESET RECORDS\n");
+        line(2);
+        printf("Are you sure to reset the records?\n");
+        printf("[Y/N]\n");
+        line(0);
+        printf("Enter Choice: ");
+        if (scanf("%c", &choice) != 1){
+            clearInt();
+            invalidInput();
+        }
+        choice = toupper(choice);
+        clearInt();
+        clear();
+        switch (choice)
+        {
+        case 'Y':
+            if (remove(FILENAME) == 0 && remove(SAVED_ID) == 0 && remove(SAVED_COUNT) == 0){
+                (*studentCount) = 0;
+                (*id) = 1000;
+                printf("File Reset Successfully!\n");
+            }
+            else
+            {
+                perror("");
+            }
+            return;
+        case 'N':
+            return;
+
+        default:
+            printf("Choose[Y/N]\n");
+            break;
+        }
+    }
 }
 
 //SAVE AND LOAD.
@@ -137,6 +222,7 @@ void save(int id, int studentCount){
 
     if (stream == NULL){
         perror("Failed to save file");
+        return;
     }
 
     fwrite(&count, sizeof(count), 1, stream);
@@ -147,23 +233,24 @@ void save(int id, int studentCount){
     int saveId = (id);
     if (stream == NULL){
         perror("Failed to save file");
+        return;
     }
 
     fwrite(&saveId, sizeof(saveId), 1,stream);
     fclose(stream);
     printf("Student Saved Successfully!\n");
 }
+
 int load(int *id){
     FILE *stream = fopen(SAVED_COUNT, "rb");
     int count = 0;
     
     if (stream == NULL){
         perror("Failed to load file");
+        return 0;;
     }
 
-
     fread(&count, sizeof(count), 1, stream);
-
     clear();
     fclose(stream);
 //----------------------------------------
@@ -172,6 +259,7 @@ int load(int *id){
 
     if (stream == NULL){
         perror("Failed to load file");
+        return 0;
     }
 
     fread(&newId, sizeof(int), 1, stream);
