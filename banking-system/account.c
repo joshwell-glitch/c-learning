@@ -302,11 +302,24 @@ void editAccount(int accountCount){
 }
 
 void deleteAccount(int accountCount){
+    int delete;
+
+    do
+    {
+        line(2);
+        printf("DELETE ACCOUNT\n");
+        line(2);
         if (accountCount == 0){
         printf("No registered accounts at the moment.\n");
         getchar();
         clear();
         return;
         }
-
+        line(0);
+        printf("Press Enter to return...");
+        line(0);
+    }
+    while (delete != 0);
+    clear();
+    return;
 }
