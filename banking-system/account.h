@@ -19,7 +19,7 @@ extern Account accounts[MAX_ACCOUNT];
 void createAccount(int *accountCount, int *accountNumber);
 void viewAccounts(int accountCount);
 void searchAccount(int accountCount);
-void editAccount();
-void deleteAccount();
+void editAccount(int accountCount);
+void deleteAccount(int accountCount);
 
 #endif

@@ -53,10 +53,10 @@ int main(){
             searchAccount(accountCount);
             break;
         case 4:
-            editAccount();
+            editAccount(accountCount);
             break;
         case 5:
-            deleteAccount();
+            deleteAccount(accountCount);
             break;
         }
 
