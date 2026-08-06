@@ -6,6 +6,7 @@
 #include "account.h"
 #include "file.h"
 
+
 Account accounts[MAX_ACCOUNT];
 
 void createAccount(int *accountCount){
@@ -14,6 +15,10 @@ void createAccount(int *accountCount){
     char type[2][MAX_CHAR_ACCOUNT_TYPE] = {"Savings", "Current"};
     Account newAccount;
     FILE *stream = fopen(ACCOUNTS, "wb");
+    if (stream == NULL){
+        perror("");
+        return;
+    }
 
     while(true){
     line(2);
@@ -76,6 +81,7 @@ void createAccount(int *accountCount){
     accounts[*accountCount] = newAccount;
     fwrite(&accounts[*accountCount], sizeof(Account), 1, stream);
     (*accountCount)++;
+    save(*accountCount);
     fclose(stream);
     printf("Account Created Successfully!\n");
     line(0);
@@ -83,7 +89,6 @@ void createAccount(int *accountCount){
     getchar();
     clear();
     return;
-    
     }
 }
 

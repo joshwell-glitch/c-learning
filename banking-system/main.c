@@ -1,13 +1,17 @@
 #include <stdio.h>
 #include "utils.h"
 #include "account.h"
+#include "file.h"
 //coded by: joshwell
 
 int main(){
     int choice;
     int accountCount = 0;
+    accountCount = load();
+    printf("%d\n", accountCount);
 
-    do{        
+    do{
+
         line(2);
         printf("BANKING SYSTEM\n");
         line(2);
