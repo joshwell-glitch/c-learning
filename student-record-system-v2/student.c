@@ -175,9 +175,160 @@ void searchStudent(int studentCount){
     }
 }
 
-void editStudent(){
-    return;
+void editStudent(int id, int studentCount){
+    FILE *stream;
+    int input;
+    char choice;
+    Student newStudent;
+    const char courses[3][MAX_CHAR_COURSE] = {"BSCS", "BSIT", "BSCE"};
+    while (1)
+    {
+        stream = fopen(FILENAME, "rb");
+        if (stream == NULL){
+        perror("");
+        return;
+        }
+        line(2);
+        printf("EDIT STUDENT\n");
+        line(2);
+        printf("[0] Return\n");
+        line(1);
+        printf("Enter Student ID: ");
+        if (scanf("%d", &input) != 1){
+            clearInt();
+            clear();
+            invalidInput();
+            fclose(stream);
+            continue;
+        }
+        clearInt();
+        if (input == 0){
+            clear();
+            fclose(stream);
+            return;
+        if (input < 1000){
+            clear();
+            printf("ID starts at 1000!\n");
+            continue;
+        }
+        line(1);
+        }
+        for (int i = 0; i < studentCount; i++){
+            fread(&students[i], sizeof(students[i]), 1, stream);
+            if (input == students[i].id){
+                clear();
+                line(2);
+                printf("EDIT STUDENT\n");
+                line(2);
+
+                printf("Student Found!\n");
+                line(1);
+                printf("[%d.] ID: %d | Name: %s | Age: %d | Course: %s | GWA: %.2f\n"
+                ,  i + 1, students[i].id, students[i].name, students[i].age, students[i].course, students[i].gwa);
+                line(1);
+                printf("Are you sure to edit this student?\n");
+                printf("[Y/N]\n");
+                line(0);
+                printf("Enter Choice: ");
+                if (scanf("%c", &choice)!= 1){
+                    clearInt();
+                    clear();
+                    invalidInput();
+                    fclose(stream);
+                    continue;
+                }
+                choice = toupper(choice);
+                clearInt();
+                clear();
+                switch (choice)
+                {
+                case 'Y':
+                    if (stream == NULL){
+                        clear();
+                        perror("");
+                        return;
+                    }
+                    stream = freopen(FILENAME, "wb", stream);
+                    int course;
+
+                    newStudent.id = students[i].id;
+
+                    printf("Enter New Name: ");
+                    fgets(newStudent.name, sizeof(newStudent.name),stdin);
+                    clearStr(newStudent.name);
+                    line(1);
+
+                    printf("Enter New Age (15 - 100): ");
+                    if (scanf("%d", &newStudent.age) != 1 || newStudent.age < 15 || newStudent.age > 100){
+                        clearInt();
+                        clear();
+                        invalidInput();
+                        fclose(stream);
+                        continue;
+                    }
+                    line(1);
+
+                    printf("Select New Course:\n");
+                    printf("1. BSCS\n2. BSIT\n3. BSCE\n");
+                    printf("Enter choice: ");
+                    if (scanf("%d", &course)!= 1 || course < 1 || course > 3){
+                        clearInt();
+                        clear();
+                        invalidInput();
+                        fclose(stream);
+                        continue;
+                    }
+                    clearInt();
+
+                    switch (course)
+                    {
+                    case 1:
+                    strcpy(newStudent.course, courses[0]);
+                        break;
+                    case 2:
+                    strcpy(newStudent.course, courses[1]);
+                        break;
+                    case 3:
+                        strcpy(newStudent.course, courses[2]);
+                    break;
+                    }   
+                    line(1);
+
+                    printf("Enter New GWA (1.00 - 5.00): ");
+                    if (scanf("%f", &newStudent.gwa)!= 1 || newStudent.gwa < 1 || newStudent.gwa > 5.0){
+                        clearInt();
+                        clear();
+                        invalidInput();
+                        fclose(stream);
+                        continue;
+                    }
+                    clearInt();
+                    line(1);
+
+                    students[i] = newStudent;
+                    for (int j = 0; j < studentCount; j++){
+                        fwrite(&students[j], sizeof(students[j]), 1, stream);
+                    }
+                    fclose(stream);
+                    printf("Student Edited Successfully!\n");
+                    line(1);
+                    enterToReturn();
+                    getchar();
+                    clear();
+                    return;
+
+                case 'N':
+                    fclose(stream);
+                    return;
+                }
+           }
+        }
+        clear();
+        printf("Student Not Found!\n");
+        fclose(stream);
+    }
 }
+
 
 void deleteStudent(int id, int *studentCount){
     FILE *stream;

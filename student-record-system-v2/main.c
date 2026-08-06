@@ -52,7 +52,7 @@ int main(){
             searchStudent(studentCount);
             break;
         case 4:
-            editStudent();
+            editStudent(id, studentCount);
             break;
         case 5:
             deleteStudent(id, &studentCount);
