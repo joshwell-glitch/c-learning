@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <windows.h>
 #include "utils.h"
 #include "account.h"
 #include "file.h"
@@ -7,8 +8,8 @@
 int main(){
     int choice;
     int accountCount = 0;
-    accountCount = load();
-    printf("%d\n", accountCount);
+    int accountNumber = 100000;
+    accountCount = load(&accountNumber);
 
     do{
 
@@ -43,13 +44,13 @@ int main(){
         switch (choice)
         {
         case 1:
-            createAccount(&accountCount);
+            createAccount(&accountCount, &accountNumber);
             break;
         case 2:
             viewAccounts(accountCount);
             break;
         case 3:
-            searchAccount();
+            searchAccount(accountCount);
             break;
         case 4:
             editAccount();
@@ -60,5 +61,12 @@ int main(){
         }
 
     } while (choice != 0);
+    line(2);
+    printf("Thank you for using\n");
+    printf("BANKING SYSTEM\n");
+    line(0);
+    printf("Goodbye!\n");
+    line(2);
+    Sleep(1050);
     return 0;
 }

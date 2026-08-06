@@ -16,9 +16,9 @@ typedef struct
 
 extern Account accounts[MAX_ACCOUNT];
 
-void createAccount(int *accountCount);
+void createAccount(int *accountCount, int *accountNumber);
 void viewAccounts(int accountCount);
-void searchAccount();
+void searchAccount(int accountCount);
 void editAccount();
 void deleteAccount();
 
