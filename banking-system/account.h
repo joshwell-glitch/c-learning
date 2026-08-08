@@ -20,6 +20,7 @@ void createAccount(int *accountCount, int *accountNumber);
 void viewAccounts(int accountCount);
 void searchAccount(int accountCount);
 void editAccount(int accountCount);
-void deleteAccount(int *accountCount);
+void deleteAccount(int *accountCount, int accountNumber);
+void deposit(int accountCount);
 
 #endif

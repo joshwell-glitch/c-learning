@@ -56,7 +56,10 @@ int main(){
             editAccount(accountCount);
             break;
         case 5:
-            deleteAccount(&accountCount);
+            deleteAccount(&accountCount, accountNumber);
+            break;
+        case 6:
+            deposit(accountCount);
             break;
         }
 

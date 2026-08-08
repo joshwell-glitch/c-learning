@@ -147,7 +147,7 @@ void searchAccount(int accountCount){
         printf("Enter [0] to Return.\n");
         line(0);
 
-        printf("Account number: ");
+        printf("Account Number: ");
         if (scanf("%d", &search) != 1 || search < 100001){
             clearInt();
             invalidInput();
@@ -210,7 +210,7 @@ void editAccount(int accountCount){
         printf("Enter [0] to Return.\n");
         line(0);
 
-        printf("Account number: ");
+        printf("Account Number: ");
         if (scanf("%d", &edit) != 1 || edit < 100001){
         clearInt();
         invalidInput();
@@ -304,7 +304,7 @@ void editAccount(int accountCount){
     
 }
 
-void deleteAccount(int *accountCount){
+void deleteAccount(int *accountCount, int accountNumber){
     int delete;
     char choice;
     FILE *stream;
@@ -326,7 +326,7 @@ void deleteAccount(int *accountCount){
         printf("Enter [0] to Return.\n");
         line(0);
 
-        printf("Account number: ");
+        printf("Account Number: ");
         if (scanf("%d", &delete) != 1 || delete < 100001){
             clearInt();
             invalidInput();
@@ -355,7 +355,7 @@ void deleteAccount(int *accountCount){
                 printf("[Y] Yes\n");
                 printf("[N] No\n");
                 line(0);
-                printf("Enter choice: ");
+                printf("Enter Choice: ");
 
                 if (scanf("%C", &choice)!= 1){
                     clearInt();
@@ -374,6 +374,7 @@ void deleteAccount(int *accountCount){
                     for (int j = 0; j < *accountCount; j++){
                         fwrite(&accounts[j], sizeof(accounts[i]), 1, stream);
                     }
+                    save(*accountCount, accountNumber);
                     fclose(stream);
                     clear();
                     printf("Account Deleted Successfully!\n");
@@ -391,6 +392,86 @@ void deleteAccount(int *accountCount){
         
     }
     while (delete != 0);
+    clear();
+    return;
+}
+
+void deposit(int accountCount){
+    int search;
+    float amount;
+    FILE *stream;
+    Account newAccountBalance;
+
+    do
+    {
+        line(2);
+        printf("DEPOSIT MONEY\n");
+        line(2);
+
+        if (accountCount == 0){
+        printf("No registered accounts at the moment.\n");
+        getchar();
+        clear();
+        return;
+        }
+
+        line(0);
+        printf("Enter [0] to Return.\n");
+        line(0);
+
+        printf("Account Number: ");
+        if (scanf("%d", &search) != 1 || search < 100001){
+            clearInt();
+            invalidInput();
+            continue;
+        }
+        clearInt();
+
+        stream = fopen(ACCOUNTS, "rb");
+        for (int i = 0; i < accountCount; i++){
+            fread(&accounts[i], sizeof(accounts[i]), 1, stream);
+            if (search == accounts[i].accountNumber){
+                fclose(stream);
+                newAccountBalance = accounts[i];
+                line(0);
+                printf("Current Balance: $%.2lf\n", accounts[i].balance);
+                line(0);
+                printf("Deposit Money: ");
+                line(0);
+
+                if (scanf("%f", &amount) != 1 || amount < 0){
+                    clearInt();
+                    invalidInput();
+                    continue;
+                }
+                clearInt();
+                
+                line(1);
+                printf("New Balance: %.2lf", accounts[i].balance);
+
+                newAccountBalance.balance += amount;
+                accounts[i] = newAccountBalance;
+                stream = fopen(ACCOUNTS, "wb");
+                for (int j = 0; j < accountCount; j++){
+                    fwrite(&accounts[j], sizeof(accounts[j]), 1, stream);
+                }
+                fclose(stream);
+                
+                line(0);
+                printf("Deposit Successful!\n");
+                line(0);
+                printf("Press Enter to Return...");
+                getchar();
+                clear();
+                return;
+                
+            }
+        }
+        clear();
+        fclose(stream);
+        continue;
+
+    } while (search != 0);
     clear();
     return;
 }
