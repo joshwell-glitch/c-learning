@@ -24,5 +24,6 @@ void deleteAccount(int *accountCount, int accountNumber);
 void statistics(int accountCount);
 void deposit(int accountCount);
 void withdraw(int accountCount);
+void transfer(int accountCount);
 
 #endif

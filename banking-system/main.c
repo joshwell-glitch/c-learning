@@ -64,6 +64,9 @@ int main(){
         case 7:
             withdraw(accountCount);
             break;
+        case 8:
+            transfer(accountCount);
+            break;
         case 9:
             statistics(accountCount);
             break;

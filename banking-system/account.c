@@ -137,10 +137,10 @@ void searchAccount(int accountCount){
         line(2);
 
         if (accountCount == 0){
-        printf("No registered accounts at the moment.\n");
-        getchar();
-        clear();
-        return;
+            printf("No registered accounts at the moment.\n");
+            getchar();
+            clear();
+            return;
         }
 
         line(0);
@@ -647,4 +647,131 @@ void withdraw(int accountCount){
     clear();
     return;
        
+}
+
+void transfer(int accountCount){
+    int first;
+    int second;
+    double amount;
+    FILE *stream;
+    Account firstAcc;
+    Account secondAcc;
+
+    do
+    {
+        line(2);
+        printf("TRANSFER MONEY\n");
+        line(2);
+
+        if (accountCount == 0){
+        printf("No registered accounts at the moment.\n");
+        getchar();
+        clear();
+        return;
+        }
+
+        line(0);
+        printf("Enter [0] to Return.\n");
+        line(0);
+
+        printf("Sender Account Number: ");
+        if (scanf("%d", &first)!= 1 || first < 100001){
+            clearInt();
+            invalidInput();
+            continue;
+        }
+        clearInt();
+        int i = 0;
+        stream = fopen(ACCOUNTS, "rb");
+        for (i; i < accountCount; i++){
+            fread(&accounts[i], sizeof(accounts[i]), 1, stream);
+            if (first == accounts[i].accountNumber){
+                fclose(stream);
+                firstAcc = accounts[i];
+                break;
+            }
+        }
+
+        if (first != accounts[i].accountNumber && i == accountCount){
+            clear();
+            printf("Account not found.\n");
+            continue;
+        }
+
+        line(0);
+        printf("Receiver Account Number: ");
+        if (scanf("%d", &second) != 1 || second < 100001){
+            clearInt();
+            invalidInput();
+            continue;
+        }
+        clearInt();
+        int j = 0;
+        stream = fopen(ACCOUNTS, "rb");
+        for (j; j < accountCount; j++){
+            fread(&accounts[j], sizeof(accounts[j]), 1, stream);
+            if (second == accounts[j].accountNumber){
+                fclose(stream);
+                secondAcc = accounts[j];
+                break;
+            }
+        }
+
+        if (second != accounts[j].accountNumber && j == accountCount){
+            clear();
+            printf("Account not found.\n");
+            continue;
+        }
+
+        if (firstAcc.accountNumber == secondAcc.accountNumber){
+            clear();
+            fprintf(stderr, "Error: You can't transfer money to the same account.\n");
+            continue;
+        }
+
+        line(0);
+        printf("Transfer Amount: $");
+        if (scanf("%lf", &amount) != 1 || amount < 0){
+            clearInt();
+            invalidInput();
+            continue;
+        }
+        clearInt();
+
+        if (amount > firstAcc.balance){
+            clear();
+            fprintf(stderr, "Error: Insufficent funds.\n");
+            continue;
+        }
+
+        firstAcc.balance -= amount;
+        secondAcc.balance += amount;
+        accounts[i].balance = firstAcc.balance;
+        accounts[j].balance = secondAcc.balance;
+        stream = fopen(ACCOUNTS, "wb");
+        for (int k = 0; k < accountCount; k++){
+            fwrite(&accounts[k], sizeof(accounts[k]), 1, stream);
+        }
+        fclose(stream);
+
+        
+        line(1);
+        printf("Transfer Sucessful!\n");
+        line(0);
+
+        printf("From : %s\n", firstAcc.name);
+        printf("To   : %s\n", secondAcc.name);
+        line(0);
+        printf("Amount: $%.2lf\n", amount);
+        line(0);
+        printf("New Balance: $%.2lf\n", secondAcc.balance);
+        line(0);
+        printf("Press Enter to Return...");
+        getchar();
+        clear();
+        return;
+
+    } while (first != 0 || second != 0);
+    clear();
+    return;
 }
