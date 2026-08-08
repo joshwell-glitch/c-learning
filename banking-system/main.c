@@ -61,6 +61,9 @@ int main(){
         case 6:
             deposit(accountCount);
             break;
+        case 9:
+            statistics(accountCount);
+            break;
         }
 
     } while (choice != 0);

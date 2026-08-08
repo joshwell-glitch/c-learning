@@ -396,6 +396,53 @@ void deleteAccount(int *accountCount, int accountNumber){
     return;
 }
 
+void statistics(int accountCount){
+
+    line(2);
+    printf("STATISTICS\n");
+    line(2);
+
+    if (accountCount == 0){
+        printf("No registered accounts at the moment.\n");
+        getchar();
+        clear();
+        return;
+    }
+
+    line(0);
+    printf("Total Accounts: %d", accountCount);
+    line(0);
+
+    line(1);
+
+    line(0);
+    printf("Total Money: \n");
+    line(0);
+    printf("Highest Balance: \n");
+    line(0);
+    printf("Lowest Balance: \n");
+    line(0);
+    printf("Average Balance: \n");
+
+    line(0);
+    line(1);
+    line(0);
+
+    printf("Savings Accounts: \n");
+    line(0);
+    printf("Current Accounts: \n");
+
+    line(0);
+    line(1);
+    line(0);
+
+    printf("Press Enter to Return...");
+    getchar();
+    clear();
+    return;
+
+}
+
 void deposit(int accountCount){
     int search;
     float amount;
@@ -436,7 +483,7 @@ void deposit(int accountCount){
                 line(0);
                 printf("Current Balance: $%.2lf\n", accounts[i].balance);
                 line(0);
-                printf("Deposit Money: ");
+                printf("Deposit Amount: ");
                 line(0);
 
                 if (scanf("%f", &amount) != 1 || amount < 0){
@@ -445,12 +492,14 @@ void deposit(int accountCount){
                     continue;
                 }
                 clearInt();
-                
-                line(1);
-                printf("New Balance: %.2lf", accounts[i].balance);
+    
 
                 newAccountBalance.balance += amount;
                 accounts[i] = newAccountBalance;
+
+                line(1);
+                printf("New Balance: $%.2lf\n", accounts[i].balance);
+
                 stream = fopen(ACCOUNTS, "wb");
                 for (int j = 0; j < accountCount; j++){
                     fwrite(&accounts[j], sizeof(accounts[j]), 1, stream);

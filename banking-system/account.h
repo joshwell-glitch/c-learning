@@ -21,6 +21,7 @@ void viewAccounts(int accountCount);
 void searchAccount(int accountCount);
 void editAccount(int accountCount);
 void deleteAccount(int *accountCount, int accountNumber);
+void statistics(int accountCount);
 void deposit(int accountCount);
 
 #endif
