@@ -482,7 +482,7 @@ void statistics(int accountCount){
 
 void deposit(int accountCount){
     int search;
-    float amount;
+    double amount;
     FILE *stream;
     Account newAccountBalance;
 
@@ -522,7 +522,7 @@ void deposit(int accountCount){
                 line(0);
                 printf("Deposit Amount : $");
 
-                if (scanf("%f", &amount) != 1 || amount < 0){
+                if (scanf("%lf", &amount) != 1 || amount < 0){
                     clearInt();
                     invalidInput();
                     continue;
@@ -560,4 +560,91 @@ void deposit(int accountCount){
     } while (search != 0);
     clear();
     return;
+}
+
+void withdraw(int accountCount){
+    int input;
+    double amount;
+    FILE *stream;
+    Account withdrawAccountBalance;
+
+    do
+    {
+        line(2);
+        printf("WITHDRAW MONEY\n");
+        line(2);
+
+        if (accountCount == 0){
+        printf("No registered accounts at the moment.\n");
+        getchar();
+        clear();
+        return;
+        }
+
+        line(0);
+        printf("Enter [0] to Return.\n");
+        line(0);
+
+        printf("Account Number: ");
+        if (scanf("%d", &input) != 1 || input < 100001){
+            clearInt();
+            invalidInput();
+            continue;
+        }
+        clearInt();
+
+        stream = fopen(ACCOUNTS, "rb");
+        for (int i = 0; i < accountCount; i++){
+            fread(&accounts[i], sizeof(accounts[i]), 1, stream);
+            if (input == accounts[i].accountNumber){
+                fclose(stream);
+                withdrawAccountBalance = accounts[i];
+                line(0);
+                printf("Current Balance : $%.2lf\n", accounts[i].balance);
+                line(0);
+                printf("Withdraw Amount : $");
+
+                if (scanf("%lf", &amount)!= 1){
+                    clearInt();
+                    invalidInput();
+                    continue;
+                }
+                clearInt();
+
+                if (amount > accounts[i].balance){
+                    clear();
+                    fprintf(stderr, "Error: Insufficient Balance.\n");
+                    continue;
+                }
+
+                if (amount < 0){
+                    clear();
+                    fprintf(stderr, "Error: Amount must not be less than 0.\n");
+                    continue;
+                }
+
+                withdrawAccountBalance.balance -= amount;
+                accounts[i] = withdrawAccountBalance;
+                stream = fopen(ACCOUNTS, "wb");
+                for (int j = 0; j < accountCount; j++){
+                    fwrite(&accounts[j], sizeof(accounts[j]), 1, stream);
+                }
+                fclose(stream);
+                line(0);
+                line(1);
+                printf("Remaining Balance : $%.2lf\n", accounts[i].balance);
+                line(0);
+                printf("Withdrawal Successful!\n");
+                line(0);
+                printf("Press Enter to Return...");
+                getchar();
+                clear();
+                return;
+            }
+        }
+
+    } while (input != 0);
+    clear();
+    return;
+       
 }
