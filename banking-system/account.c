@@ -135,6 +135,7 @@ void searchAccount(int accountCount){
         line(2);
         printf("SEARCH ACCOUNT\n");
         line(2);
+
         if (accountCount == 0){
         printf("No registered accounts at the moment.\n");
         getchar();
@@ -190,12 +191,14 @@ void editAccount(int accountCount){
     int edit;
     int choose;
     char type[2][MAX_CHAR_ACCOUNT_TYPE] = {"Savings", "Current"};
+    FILE *stream;
 
     do
     {
         line(2);
         printf("EDIT ACCOUNT\n");
         line(2);
+
         if (accountCount == 0){
         printf("No registered accounts at the moment.\n");
         getchar();
@@ -215,7 +218,7 @@ void editAccount(int accountCount){
         }
         clearInt();
 
-        FILE *stream = fopen(ACCOUNTS, "rb");
+        stream = fopen(ACCOUNTS, "rb");
         for (int i = 0; i < accountCount; i++){
             fread(&accounts[i], sizeof(accounts[i]), 1, stream);
             if (edit == accounts[i].accountNumber){
@@ -301,23 +304,91 @@ void editAccount(int accountCount){
     
 }
 
-void deleteAccount(int accountCount){
+void deleteAccount(int *accountCount){
     int delete;
+    char choice;
+    FILE *stream;
 
     do
     {
         line(2);
         printf("DELETE ACCOUNT\n");
         line(2);
-        if (accountCount == 0){
+
+        if (*accountCount == 0){
         printf("No registered accounts at the moment.\n");
         getchar();
         clear();
         return;
         }
+
         line(0);
-        printf("Press Enter to return...");
+        printf("Enter [0] to Return.\n");
         line(0);
+
+        printf("Account number: ");
+        if (scanf("%d", &delete) != 1 || delete < 100001){
+            clearInt();
+            invalidInput();
+            continue;
+        }
+        clearInt();
+
+        stream = fopen(ACCOUNTS, "rb");
+        for (int i = 0; i < *accountCount; i++){
+            fread(&accounts[i],sizeof(accounts[i]),1 ,stream);
+            if (delete == accounts[i].accountNumber){
+                clear();
+                line(2);
+                printf("DELETE ACCOUNT\n");
+                line(2);
+                line(0);
+                printf("Account Number: %d\n", accounts[i].accountNumber);
+                printf("Name          : %s\n", accounts[i].name);
+                printf("Balance       : $%.2lf\n", accounts[i].balance);
+                fclose(stream);
+                line(0);
+
+                line(1);
+                printf("Delete this account?\n");
+                line(0);
+                printf("[Y] Yes\n");
+                printf("[N] No\n");
+                line(0);
+                printf("Enter choice: ");
+
+                if (scanf("%C", &choice)!= 1){
+                    clearInt();
+                    invalidInput();
+                    continue;
+                }
+                clearInt();
+                choice = toupper(choice);
+
+                if (choice == 'Y'){
+                    for (i; i < *accountCount - 1; i++){
+                        accounts[i] = accounts[i+1];
+                    }
+                    (*accountCount)--;
+                    stream = fopen(ACCOUNTS, "wb");
+                    for (int j = 0; j < *accountCount; j++){
+                        fwrite(&accounts[j], sizeof(accounts[i]), 1, stream);
+                    }
+                    fclose(stream);
+                    clear();
+                    printf("Account Deleted Successfully!\n");
+                    return;
+                }
+                else{
+                    clear();
+                    continue;
+                }
+            }
+        }
+        clear();
+        fclose(stream);
+        continue;
+        
     }
     while (delete != 0);
     clear();
