@@ -398,6 +398,43 @@ void deleteAccount(int *accountCount, int accountNumber){
 
 void statistics(int accountCount){
 
+    int i = 0;
+    FILE *stream;
+    double totalMoney = 0;
+    double highest = 0;
+    double lowest = 0;
+    double average = 0;
+    char type[] = "Savings";
+    int result;
+    int savings = 0;
+    int current = 0;
+
+    highest = accounts[0].balance;
+    lowest = accounts[0].balance;
+    stream = fopen(ACCOUNTS, "rb");
+
+    for (i; i < accountCount; i++){
+        fread(&accounts[i], sizeof(accounts[i]), 1, stream);
+        totalMoney += accounts[i].balance;
+
+        if (highest < accounts[i].balance){
+            highest = accounts[i].balance;
+        }
+        if (lowest > accounts[i].balance){
+            lowest = accounts[i].balance;
+        }
+
+        result = strcmp(type, accounts[i].accountType);
+        if (result == 0){
+            savings++;
+        }
+        else{
+            current++;
+        }
+
+    }
+    average = totalMoney / accountCount;
+
     line(2);
     printf("STATISTICS\n");
     line(2);
@@ -410,27 +447,27 @@ void statistics(int accountCount){
     }
 
     line(0);
-    printf("Total Accounts: %d", accountCount);
+    printf("Total Accounts      : %d", accountCount);
     line(0);
 
     line(1);
 
     line(0);
-    printf("Total Money: \n");
+    printf("Total Money         : $%.2lf\n", totalMoney);
     line(0);
-    printf("Highest Balance: \n");
+    printf("Highest Balance     : $%.2lf\n", highest);
     line(0);
-    printf("Lowest Balance: \n");
+    printf("Lowest Balance      : $%.2lf\n", lowest);
     line(0);
-    printf("Average Balance: \n");
+    printf("Average Balance     : $%.2lf\n", average);
 
     line(0);
     line(1);
     line(0);
 
-    printf("Savings Accounts: \n");
+    printf("Savings Accounts    : %d\n", savings);
     line(0);
-    printf("Current Accounts: \n");
+    printf("Current Accounts    : %d\n", current);
 
     line(0);
     line(1);
@@ -481,10 +518,9 @@ void deposit(int accountCount){
                 fclose(stream);
                 newAccountBalance = accounts[i];
                 line(0);
-                printf("Current Balance: $%.2lf\n", accounts[i].balance);
+                printf("Current Balance : $%.2lf\n", accounts[i].balance);
                 line(0);
-                printf("Deposit Amount: ");
-                line(0);
+                printf("Deposit Amount : $");
 
                 if (scanf("%f", &amount) != 1 || amount < 0){
                     clearInt();
@@ -492,13 +528,14 @@ void deposit(int accountCount){
                     continue;
                 }
                 clearInt();
+                line(0);
     
 
                 newAccountBalance.balance += amount;
                 accounts[i] = newAccountBalance;
 
                 line(1);
-                printf("New Balance: $%.2lf\n", accounts[i].balance);
+                printf("New Balance : $%.2lf\n", accounts[i].balance);
 
                 stream = fopen(ACCOUNTS, "wb");
                 for (int j = 0; j < accountCount; j++){
